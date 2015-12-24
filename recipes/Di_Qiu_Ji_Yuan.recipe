@@ -1,0 +1,16 @@
+from recipe import Recipe
+
+class DiQiuJiYuan(Recipe):
+
+    title = '地球纪元'
+    description = ''
+    site_url = 'http://www.biquge.la/book/9134/'
+
+    def parse_index(self):
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for dd in reversed(soup.find_all('dd')[-5:]):
+            if dd.a:
+                 articles.append({'title': dd.a.text,
+                                  'url': self.site_url + dd.a['href']})
+        return articles
