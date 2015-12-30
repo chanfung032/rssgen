@@ -1,0 +1,20 @@
+from recipe import Recipe
+
+class Xiao_Lv_He_Xiao_Lan(Recipe):
+
+    title = '小绿和小蓝'
+    description = ''
+    site_url = 'http://ac.qq.com/Comic/comicInfo/id/536332'
+    base_url = 'http://ac.qq.com'
+
+    def parse_index(self):
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for item in reversed(soup.find_all(class_='works-chapter-item')[-5:]):
+            if item.a:
+                 articles.append({'title': item.a.attrs['title'],
+                                  'url': self.base_url + item.a['href']})
+        return articles
+
+    def parse_article(self, url):
+        return ''

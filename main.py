@@ -46,3 +46,6 @@ def gen():
     resp = make_response(rss.to_xml(encoding='utf-8'))
     resp.headers['content-type'] = 'application/xml'
     return resp
+
+if __name__ == '__main__':
+    app.run(port=5000)
