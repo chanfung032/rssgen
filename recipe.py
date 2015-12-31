@@ -15,6 +15,9 @@ class Recipe(object):
         article = Document(html).summary()
         return article
 
+    def url_to_article(self, url):
+        return '<a href="%s">%s</a>' % (url, url)
+
     def cook(self):
         index = self.parse_index()
         for item in index:

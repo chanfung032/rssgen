@@ -17,4 +17,4 @@ class Xiao_Lv_He_Xiao_Lan(Recipe):
         return articles
 
     def parse_article(self, url):
-        return ''
+        return self.url_to_article(url)
