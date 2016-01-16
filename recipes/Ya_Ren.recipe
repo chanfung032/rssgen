@@ -1,0 +1,19 @@
+from recipe import Recipe
+
+class Ya_Ren(Recipe):
+
+    title = '亚人'
+    description = ''
+    site_url = 'http://www.dm5.com/manhua-yaren/'
+    base_url = 'http://www.dm5.com'
+
+    def parse_index(self):
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for a in soup.find_all(id='cbc_1')[0].find_all('a'):
+             articles.append({'title': a.attrs['title'],
+                              'url': self.base_url + a['href']})
+        return articles
+
+    def parse_article(self, url):
+        return self.url_to_article(url)
