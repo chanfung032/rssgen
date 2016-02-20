@@ -1,0 +1,17 @@
+from recipe import Recipe
+
+class JinJiDeJuRen(Recipe):
+
+    title = '进击的巨人'
+    description = ''
+    site_url = 'http://www.iibq.com/comic/82012134383/'
+
+    def parse_index(self):
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for a in soup.find(id='subBookListAct').find_all('a'):
+            articles.append({'title': a.text, 'url': a['href']})
+        return articles
+
+    def parse_article(self, url):
+        return self.url_to_article(url)
