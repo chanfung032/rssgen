@@ -1,0 +1,23 @@
+from recipe import Recipe
+
+class Space_Engine_Donations(Recipe):
+
+    title = 'Space Engine Donations'
+    description = ''
+    site_url = 'http://en.spaceengine.org/index/funding_and_donations/0-26'
+    donations_js_url = 'http://spaceengine.org/scripts/donations.js'
+
+    def parse_index(self):
+        from re import search
+        from urllib import urlencode
+        from urllib2 import urlopen
+
+        content = urlopen(self.donations_js_url).read()
+        current_cash = search(r'var current_cash = (\d+);', content).group(1)
+        milestone = search(r'var next_small_milestone  = (\d+);', content).group(1)
+
+        return [{'title': 'Progress: ${1} / ${0}'.format(milestone, current_cash),
+                 'url': self.site_url + '?' + urlencode({'goal': milestone, 'cash': current_cash})}]
+
+    def parse_article(self, url):
+        return ''
