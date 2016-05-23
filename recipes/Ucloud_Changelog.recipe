@@ -1,0 +1,14 @@
+from recipe import Recipe
+
+class UcloudChangelog(Recipe):
+    title = 'Ucloud博客'
+    description = ''
+    site_url = 'http://blog.ucloud.cn/'
+
+    def parse_index(self):
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for li in soup.find_all('li', class_='item')[:5]:
+            if li.h2.a:
+                 articles.append({'title': li.h2.a.text, 'url': li.a['href']})
+        return articles

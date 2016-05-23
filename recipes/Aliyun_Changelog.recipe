@@ -1,0 +1,16 @@
+from recipe import Recipe
+
+class AliyunChangelog(Recipe):
+    title = '阿里云产品更新'
+    description = ''
+    site_url = 'https://help.aliyun.com/noticelist/9004748.html'
+    site_root = 'https://help.aliyun.com'
+
+    def parse_index(self):
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for li in soup.find_all('li', class_='y-clear')[:5]:
+            if li.a:
+                 articles.append({'title': li.a.text,
+                                  'url': self.site_root + li.a['href']})
+        return articles

@@ -1,0 +1,16 @@
+from recipe import Recipe
+
+class BaiduYunChangelog(Recipe):
+    title = '百度云产品更新'
+    description = ''
+    site_url = 'http://developer.baidu.com/announcement/list/upgrade?page=0&page_size=10'
+    site_root = 'http://developer.baidu.com'
+
+    def parse_index(self):
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for li in soup.find_all('li', class_='txt-item')[:5]:
+            if li.a:
+                 articles.append({'title': li.a.text,
+                                  'url': self.site_root + li.a['href']})
+        return articles
