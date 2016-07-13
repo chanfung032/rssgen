@@ -1,0 +1,22 @@
+import json
+import urllib2
+from recipe import Recipe
+
+class ZhiHuZhuanLan(Recipe):
+    title = '知乎专栏'
+    description = ''
+    site_url = ''
+
+    def parse_index(self):
+        name = self.args['name']
+        self.site_url = 'https://https://zhuanlan.zhihu.com/%s' % name
+        self.title = json.load(urllib2.urlopen('https://zhuanlan.zhihu.com/api/columns/%s' % name))['name']
+
+        articles = []
+        data = json.load(urllib2.urlopen('https://zhuanlan.zhihu.com/api/columns/%s/posts?limit=3' % name))
+        for e in data:
+             articles.append({'title': e['title'], 'url': 'https://zhuanlan.zhihu.com' + e['url']})
+        return articles
+
+    def parse_article(self, url):
+        return self.url_to_article(url)
