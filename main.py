@@ -21,12 +21,14 @@ def index():
 </ul>
 ''').render(recipes=[os.path.basename(i).rsplit('.', 1)[0] for i in glob.glob('recipes/*.recipe')])
 
+from flask import request
+
 @app.route('/gen')
 def gen():
     fname = os.path.join(os.path.dirname(__file__), 'recipes', request.args.get('recipe'))
 
     recipe = compile_recipe(open('%s.recipe' % fname).read())
-    feeds = recipe().cook()
+    feeds = recipe(request.args).cook()
 
     rss = PyRSS2Gen.RSS2(
         title = feeds['title'],

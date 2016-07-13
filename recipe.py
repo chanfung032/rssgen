@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from readability.readability import Document
 
 class Recipe(object):
+    def __init__(self, args):
+        self.args = args
 
     def index_to_soup(self, url):
         return BeautifulSoup(urllib2.urlopen(url))
