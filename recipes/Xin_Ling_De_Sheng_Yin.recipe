@@ -1,0 +1,20 @@
+from recipe import Recipe
+
+class Xin_Ling_De_Sheng_Yin(Recipe):
+
+    title = '心灵的声音'
+    description = ''
+    site_url = 'http://www.webtoons.com/zh-hant/comedy/the-sound-of-your-heart/list?title_no=155'
+
+    def parse_index(self):
+        self.body = {}
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for item in soup.find(id='_listUl').find_all('li'):
+            url = item.a.attrs['href']
+            articles.append({'title': item.a.find(class_='subj').text, 'url': url})
+            self.body[url] = str(item.a.find('img'))
+        return articles
+
+    def parse_article(self, url):
+        return self.body[url]

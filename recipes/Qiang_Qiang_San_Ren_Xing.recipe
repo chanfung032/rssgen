@@ -1,0 +1,20 @@
+from recipe import Recipe
+
+class QiangQiangSanRenXing(Recipe):
+
+    title = '锵锵三人行'
+    description = ''
+    site_url = 'http://v.ifeng.com/vlist/tv/qqsrx/all/0/1/detail.shtml'
+
+    def parse_index(self):
+        self.contents = {}
+        articles = []
+        soup = self.index_to_soup(self.site_url)
+        for div in soup.find(class_='vlistbox').find_all(class_='pic'):
+            url = div.a['href']
+            self.contents[url] = str(div)
+            articles.append({'title': div.a['title'], 'url': url})
+        return articles
+
+    def parse_article(self, url):
+        return self.contents[url]
