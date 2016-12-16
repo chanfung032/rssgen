@@ -2,3 +2,4 @@ beautifulsoup4
 flask
 readability-lxml
 PyRSS2Gen
+gunicorn
