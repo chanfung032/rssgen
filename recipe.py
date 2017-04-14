@@ -1,4 +1,5 @@
 import urllib2
+import base64
 from bs4 import BeautifulSoup
 from readability.readability import Document
 
@@ -19,6 +20,10 @@ class Recipe(object):
 
     def url_to_article(self, url):
         return '<a href="%s">%s</a>' % (url, url)
+
+    def redirect_audio_url(self, url):
+        from flask import request
+        return 'http://%s/a/%s.html' % (request.headers.get('host'), base64.b64encode(url))
 
     def cook(self):
         index = self.parse_index()

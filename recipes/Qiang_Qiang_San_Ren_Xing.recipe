@@ -4,17 +4,47 @@ class QiangQiangSanRenXing(Recipe):
 
     title = '锵锵三人行'
     description = ''
-    site_url = 'http://v.ifeng.com/vlist/tv/qqsrx/all/0/1/detail.shtml'
+    #site_url = 'http://v.ifeng.com/vlist/tv/qqsrx/all/0/1/detail.shtml'
+
+    pid = '61509'
+    site_url = 'http://diantai.ifeng.com/index.php/public/programnavDetails?pid=%s' % pid
+    detail_url = 'http://diantai.ifeng.com/index.php/audio/GetAudioFind?fid=1&rid=%s&pid=%s'
+
+    #def parse_index(self):
+    #    self.contents = {}
+    #    articles = []
+    #    soup = self.index_to_soup(self.site_url)
+    #    for div in soup.find(class_='vlistbox').find_all(class_='pic'):
+    #        url = div.a['href']
+    #        self.contents[url] = str(div)
+    #        articles.append({'title': div.a['title'], 'url': url})
+    #    return articles
 
     def parse_index(self):
         self.contents = {}
         articles = []
         soup = self.index_to_soup(self.site_url)
-        for div in soup.find(class_='vlistbox').find_all(class_='pic'):
-            url = div.a['href']
-            self.contents[url] = str(div)
-            articles.append({'title': div.a['title'], 'url': url})
+
+        ids = []
+        for div in soup.find_all(class_='si-tt'):
+            ids.append(div.a['id'])
+        print ids
+
+        extra_headers = {
+            #'Accept-Encoding': 'gzip, deflate, sdch',
+            'Accept-Language': 'zh-CN,zh;q=0.8',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Referer': self.site_url,
+            'X-Requested-With': 'XMLHttpRequest',
+        }
+        
+        import json, urllib2
+        for id_ in ids[:5]:
+            data = json.load(urllib2.urlopen(urllib2.Request(self.detail_url % (id_, self.pid), headers=extra_headers)))
+            articles.append({'title': data['rtle'], 'url': self.redirect_audio_url(data['filepath'])})
+
         return articles
 
     def parse_article(self, url):
-        return self.contents[url]
+        return self.url_to_article(url)
