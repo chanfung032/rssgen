@@ -1,0 +1,26 @@
+#-*-encoding: utf-8
+
+from recipe import Recipe
+
+class Zhong_Guo_Dian_Yin_Zi_Liao_Guan(Recipe):
+
+    title = '中国电影资料馆排片'
+    description = ''
+    site_url = 'http://www.cfa.org.cn/tabid/562/Default.aspx'
+
+    def parse_index(self):
+        soup = self.index_to_soup(self.site_url)
+        self.content = soup.find_all(class_='bottomresult')[0]
+
+        date_list = self.content.find_all(class_='date_list')
+        date = (u'%s%s日' % (
+            date_list[0].find(class_='fa_month').text,
+            date_list[0].find(class_='fa_date').text,
+        )).encode('utf-8')
+        summary = ', '.join([i.text for i in self.content.find(class_='rowPiece').find_all('a')]).strip().encode('utf-8')
+
+        import urllib
+        return [{'title': '%s %s' % (date, summary), 'url': self.site_url + '?n=' + urllib.quote(date)},]
+
+    def parse_article(self, url):
+        return str(self.content)
