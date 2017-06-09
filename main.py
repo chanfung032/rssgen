@@ -50,7 +50,7 @@ def gen():
     resp.headers['content-type'] = 'application/xml'
     return resp
 
-@app.route('/a/<token>.html')
+@app.route('/a/<path:token>.html')
 def audio(token):
     url = base64.b64decode(token)
     return Template('''
