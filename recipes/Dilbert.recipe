@@ -1,6 +1,6 @@
 from recipe import Recipe
 
-class Ya_Ren(Recipe):
+class Dilbert(Recipe):
 
     title = '呆伯特'
     description = ''
@@ -13,5 +13,7 @@ class Ya_Ren(Recipe):
 
     def parse_article(self, url):
         soup = self.index_to_soup(url)
-        return str(soup.find(class_='img-comic'))
+        c = soup.find(class_='img-comic')
+        del c.attrs['width'], c.attrs['height']
+        return str(c)
 
