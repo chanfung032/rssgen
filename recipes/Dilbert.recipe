@@ -1,0 +1,17 @@
+from recipe import Recipe
+
+class Ya_Ren(Recipe):
+
+    title = '呆伯特'
+    description = ''
+    site_url = 'http://dilbert.com/feed.rss'
+
+    def parse_index(self):
+        soup = self.index_to_soup(self.site_url)
+        latest_link = soup.find_all('link')[2]['href']
+        return [{'title': latest_link.rsplit('/', 1)[-1], 'url': latest_link}]
+
+    def parse_article(self, url):
+        soup = self.index_to_soup(url)
+        return str(soup.find(class_='img-comic'))
+
