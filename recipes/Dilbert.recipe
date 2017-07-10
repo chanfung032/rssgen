@@ -14,6 +14,6 @@ class Dilbert(Recipe):
     def parse_article(self, url):
         soup = self.index_to_soup(url)
         c = soup.find(class_='img-comic')
-        del c.attrs['width'], c.attrs['height']
+        del c.attrs['width'], c.attrs['height'], c.attrs['class']
         return str(c)
 
