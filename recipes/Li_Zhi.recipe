@@ -1,0 +1,16 @@
+from recipe import Recipe
+
+class Li_Zhi(Recipe):
+    title = '荔枝FM'
+    description = ''
+    site_url = ''
+
+    def parse_index(self):
+        self.site_url = 'https://www.lizhi.fm/%s/' % self.args['id']
+        soup = self.index_to_soup(self.site_url)
+        self.title = soup.select('.radioInfo h1')[0].text
+        links = soup.select('.js-audio-list a')
+        return [{'title': link['title'], 'url': self.redirect_audio_url(link['data-url'])} for link in links]
+
+    def parse_article(self, url):
+        return self.url_to_article(url)
