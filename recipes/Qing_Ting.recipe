@@ -1,0 +1,17 @@
+from recipe import Recipe
+
+class Qing_Ting(Recipe):
+    title = '蜻蜓FM'
+    description = ''
+    site_url = ''
+    audio_url = 'http://od.qingting.fm/'
+
+    def parse_index(self):
+        self.site_url = 'https://m.qingting.fm/podcasters/%s' % self.args['id']
+        soup = self.index_to_soup(self.site_url)
+        self.title = soup.select('.content .name')[0].text
+        links = soup.select('#program-list a')
+        return [{'title': link.select('.title')[0].text, 'url': self.redirect_audio_url('%s/%s' % (self.audio_url, link['data-file']))} for link in links]
+
+    def parse_article(self, url):
+        return self.url_to_article(url)
