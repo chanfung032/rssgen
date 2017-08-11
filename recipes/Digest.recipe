@@ -1,0 +1,44 @@
+import time, feedparser
+from recipe import Recipe
+
+# TODO: 支持天数可以自定义
+
+class Digest(Recipe):
+
+    title = '每日摘要'
+    description = ''
+    site_url = ''
+
+    def parse_index(self):
+        self.site_url = self.args['url']
+
+        f = feedparser.parse(self.args['url'])
+        self.title = f.feed.title
+
+        start = 0
+        today = time.gmtime()
+        for e in f.entries:
+            published = e.published_parsed
+            if published.tm_year != today.tm_year or published.tm_mon != today.tm_mon or published.tm_mday != today.tm_mday:
+                break
+            start = start + 1
+        stop = start
+        target = f.entries[start].published_parsed
+        for e in f.entries[start:]:
+            published = e.published_parsed
+            if published.tm_year != target.tm_year or published.tm_mon != target.tm_mon or published.tm_mday != target.tm_mday:
+                break
+            stop = stop + 1
+
+        if self.args.get('simple'):
+            self.content = "<ul>" + '\n'.join(['<li><a href="%s">%s</a></li>' % (e.link, e.title) for e in f.entries[start:stop]]) + "</ul>"
+        else:
+            self.content = "<hr>\n".join(['<h2><a href="%s">%s</a><h2><div>%s</div>' % (e.link, e.title, e.description) for e in f.entries[start:stop]])
+
+        entry_title = '%s-%s-%s' % (target.tm_year, target.tm_mon, target.tm_mday)
+        entry_url = '%s?id=%s' % (self.args['url'], entry_title)
+
+        return [{'title': entry_title, 'url': entry_url}]
+
+    def parse_article(self, url):
+        return self.content

@@ -3,5 +3,4 @@ flask
 readability-lxml
 PyRSS2Gen
 gunicorn
-youtube-dl
-bypy
+feedparser
