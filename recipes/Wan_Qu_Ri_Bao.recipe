@@ -1,0 +1,25 @@
+from recipe import Recipe
+
+class Dilbert(Recipe):
+
+    title = '湾区日报'
+    description = ''
+    site_url = 'http://wanqu.co/feed'
+
+    def parse_index(self):
+        soup = self.index_to_soup(self.site_url)
+        titles = soup.select('title')
+        descriptions = soup.select('description')
+        for description in descriptions:
+            map(lambda x: x.decompose(), description.select('div'))
+        self.content = '\n'.join([
+            '<h2>%s</h2><div>%s</div>' % (titles[i+1].text, description)
+            for i, description in enumerate(descriptions[1:])
+        ]).replace(']]&gt;', '')
+        import re
+        link = re.search('<link/>(.*)', str(soup)).group(1)
+        return [{'title': titles[0].text, 'url': link}]
+
+    def parse_article(self, url):
+        print self.content
+        return self.content
