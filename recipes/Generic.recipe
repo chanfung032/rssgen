@@ -1,0 +1,52 @@
+import re
+import os.path
+from recipe import Recipe
+
+class Generic(Recipe):
+
+    title = ''
+    description = ''
+    site_url = ''
+
+    def parse_index(self):
+        self.site_url = self.args['url']
+
+        soup = self.index_to_soup(self.site_url)
+
+        self.title = soup.select('title')[0].text
+
+        def q(qs):
+            selector, extractor = qs.split(':')
+            nodes = soup.select(selector)
+            co = compile('n.' + extractor, '<string>', 'eval')
+            return [eval(co) for n in nodes]
+
+        titles = q(self.args['title'])
+        links = self.real_url(q(self.args['link']), self.site_url)
+
+        items = [{'title': title, 'url': links[i]} for i, title in enumerate(titles)]
+
+        if self.args.get('reverse'):
+            items = list(reversed(items))
+
+        return items
+
+    def real_url(self, urls, baseurl):
+        if len(urls) == 0:
+            return urls
+
+        u0 = urls[0]
+        print u0
+        if u0.startswith('http'):
+            return urls
+        elif u0.startswith('/'):
+            prefix = re.match(r'^https?://[^/]+', baseurl).group(0)
+            return [prefix + u for u in urls]
+        elif u0.startswith('?'):
+            return [baseurl + u for u in urls]
+        else:
+            prefix = baseurl.rsplit('/', 1)[0]
+            return [prefix + u for u in urls]
+
+    def parse_article(self, url):
+        return self.url_to_article(url)
