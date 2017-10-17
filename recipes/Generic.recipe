@@ -45,7 +45,7 @@ class Generic(Recipe):
         elif u0.startswith('?'):
             return [baseurl + u for u in urls]
         else:
-            prefix = baseurl.rsplit('/', 1)[0]
+            prefix = baseurl.rsplit('/', 1)[0] + '/'
             return [prefix + u for u in urls]
 
     def parse_article(self, url):
