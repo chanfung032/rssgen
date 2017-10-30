@@ -10,7 +10,7 @@ class Li_Zhi(Recipe):
         soup = self.index_to_soup(self.site_url)
         self.title = soup.select('.radioInfo h1')[0].text
         links = soup.select('.js-audio-list a')
-        return [{'title': link['title'], 'url': self.redirect_audio_url(link['data-url'])} for link in links]
+        return [{'title': link['title'], 'url': 'https://www.lizhi.fm' + link['href']} for link in links]
 
     def parse_article(self, url):
         return self.url_to_article(url)
