@@ -68,10 +68,27 @@ def audio(token):
     transform: translateX(-50%) translateY(-50%);
 }
 </style>
+<script type="text/javascript">
+function x(speed) {
+    document.getElementsByTagName('audio')[0].playbackRate = speed;
+}
+</script>
 </head>
 <body style="background-color: black">
 <div class='container'>
-<audio src="{{url}}" controls preload></audio>
+<audio preload="auto" controls="controls">
+  <source src="{{url}}"></source>
+</audio>
+<br/>
+<br/>
+<div>
+<center>
+<a href="#" onclick="x(1.0);return false;">1.0</a>
+<a href="#" onclick="x(1.25);return false;">1.25</a>
+<a href="#" onclick="x(1.5);return false;">1.5</a>
+<a href="#" onclick="x(2.0);return false;">2.0</a>
+</center>
+</div>
 </div>
 </body>
 </html>
