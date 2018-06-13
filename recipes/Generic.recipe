@@ -29,6 +29,10 @@ class Generic(Recipe):
         if self.args.get('reverse'):
             items = list(reversed(items))
 
+        limit = self.args.get('limit')
+        if limit is not None:
+            items = items[:limit]
+
         return items
 
     def real_url(self, urls, baseurl):

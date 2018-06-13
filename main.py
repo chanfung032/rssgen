@@ -76,7 +76,7 @@ function x(speed) {
 </head>
 <body style="background-color: black">
 <div class='container'>
-<audio preload="auto" controls="controls">
+<audio preload="auto" controls="controls" autoplay>
   <source src="{{url}}"></source>
 </audio>
 <br/>
@@ -86,10 +86,13 @@ function x(speed) {
 <a href="#" onclick="x(1.0);return false;">1.0</a>&nbsp;&nbsp;
 <a href="#" onclick="x(1.25);return false;">1.25</a>&nbsp;&nbsp;
 <a href="#" onclick="x(1.5);return false;">1.5</a>&nbsp;&nbsp;
-<a href="#" onclick="x(2.0);return false;">2.0</a>
+<a href="#" onclick="x(2.0);return false;">2.0</a>&nbsp;&nbsp;
 </center>
 </div>
 </div>
+<script type="text/javascript">
+document.getElementsByTagName('audio')[0].playbackRate = 1.5
+</script>
 </body>
 </html>
 ''').render(url=url)
