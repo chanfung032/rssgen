@@ -1,3 +1,5 @@
+#-*-coding: utf-8 -*-
+
 import base64
 import datetime
 import glob
@@ -58,10 +60,21 @@ def youtube():
         return redirect('/a/%s.html' % base64.b64encode(y_url))
     else:
         return '''
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<link href="https://cdn.staticfile.org/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class='container'>
+<br/><br/></br>
 <form action="/y" method="get">
-  URL: <input type="text" name="url"><br>
-  <input type="submit" value="play">
+  <div class="form-group"><input type="text" name="url" class="form-control" placeholder="输入 youtube URL"></div>
+  <button type="submit" class="btn btn-primary">播放</button>
 </form>
+</div>
+</body>
+</html>
 '''
 
 @app.route('/a/<path:token>.html')
