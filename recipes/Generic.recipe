@@ -31,7 +31,7 @@ class Generic(Recipe):
 
         limit = self.args.get('limit')
         if limit is not None:
-            items = items[:limit]
+            items = items[:int(limit)]
 
         return items
 
