@@ -1,0 +1,28 @@
+import re
+import urllib
+import time, feedparser
+from recipe import Recipe
+
+from flask import request
+
+class Youtube(Recipe):
+
+    title = ''
+    description = ''
+    site_url = ''
+
+    def parse_index(self):
+        feed_url = 'https://www.youtube.com/feeds/videos.xml?%s_id=%s' %  (self.args.get('type', 'channel'), self.args['id'])
+
+        f = feedparser.parse(feed_url)
+        self.title = f.feed.title
+
+        grep = self.args.get('grep')
+        if grep:
+            r = re.compile(grep)
+            return [{'title': x.title, 'url': x.link} for x in f.entries if r.search(x.title)]
+        else:
+            return [{'title': x.title, 'url': x.link} for x in f.entries]
+
+    def parse_article(self, url):
+        return self.url_to_article('http://%s/y?url=%s' % (request.headers.get('host'), urllib.quote(url)))
