@@ -3,10 +3,10 @@ import datetime
 import glob
 import os.path
 import PyRSS2Gen
-
+import subprocess
 from recipe import compile_recipe
 
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, redirect
 app = Flask(__name__)
 app.debug = True
 
@@ -49,6 +49,20 @@ def gen():
     resp = make_response(rss.to_xml(encoding='utf-8'))
     resp.headers['content-type'] = 'application/xml'
     return resp
+
+@app.route('/y')
+def youtube():
+    url = request.args.get('url')
+    if url:
+        y_url = subprocess.check_output(['youtube-dl', '-g', '-f', 'worstaudio', url]).strip()
+        return redirect('/a/%s.html' % base64.b64encode(y_url))
+    else:
+        return '''
+<form action="/y" method="get">
+  URL: <input type="text" name="url"><br>
+  <input type="submit" value="play">
+</form>
+'''
 
 @app.route('/a/<path:token>.html')
 def audio(token):

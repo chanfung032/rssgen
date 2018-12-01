@@ -4,3 +4,4 @@ readability-lxml
 PyRSS2Gen
 gunicorn
 feedparser
+youtube-dl
