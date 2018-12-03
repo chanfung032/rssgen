@@ -8,7 +8,7 @@ import PyRSS2Gen
 import subprocess
 from recipe import compile_recipe
 
-from flask import Flask, request, make_response, redirect
+from flask import Flask, request, make_response, redirect, Response, stream_with_context
 app = Flask(__name__)
 app.debug = True
 
@@ -131,6 +131,27 @@ document.getElementsByTagName('audio')[0].playbackRate = 1.5
 </body>
 </html>
 ''').render(url=url)
+
+@app.route('/gtts')
+def gtts():
+    from gtts import gTTS
+    from tempfile import TemporaryFile
+    text = request.args.get('text')
+    lang = request.args.get('lang', 'zh-cn')
+    tts = gTTS(text=text, lang=lang)
+    f = TemporaryFile()
+    tts.write_to_fp(f)
+    f.seek(0)
+    return Response(f.xreadlines(), mimetype='audio/mpeg')
+
+@app.route('/p', methods=['GET', 'POST'])
+def proxy():
+    method = request.method
+    url = request.args.get('url')
+    import requests
+    req = requests.request(method, url, stream=True)
+    return Response(stream_with_context(req.iter_content()), content_type=req.headers['content-type'])
+
 
 if __name__ == '__main__':
     app.run(port=5000)
