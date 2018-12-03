@@ -120,8 +120,7 @@ function sx(t) {
 <a href="#" onclick="x(1.75);return false;">1.75</a>&nbsp;&nbsp;
 <a href="#" onclick="x(2.0);return false;">2.0</a>&nbsp;&nbsp;
 <br/><br/>
-<a href="#" onclick="sx(-15);return false;">-15s</a>&nbsp;&nbsp;
-<a href="#" onclick="sx(15);return false;">+15s</a>
+<a href="#" onclick="sx(-15);return false;">-15s</a>
 </center>
 </div>
 </div>
