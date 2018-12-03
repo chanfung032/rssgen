@@ -99,6 +99,10 @@ def audio(token):
 function x(speed) {
     document.getElementsByTagName('audio')[0].playbackRate = speed;
 }
+
+function sx(t) {
+    document.getElementsByTagName('audio')[0].currentTime += t;
+}
 </script>
 </head>
 <body style="background-color: black">
@@ -115,6 +119,9 @@ function x(speed) {
 <a href="#" onclick="x(1.5);return false;">1.5</a>&nbsp;&nbsp;
 <a href="#" onclick="x(1.75);return false;">1.75</a>&nbsp;&nbsp;
 <a href="#" onclick="x(2.0);return false;">2.0</a>&nbsp;&nbsp;
+<br/><br/>
+<a href="#" onclick="sx(-15);return false;">-15s</a>&nbsp;&nbsp;
+<a href="#" onclick="sx(15);return false;">+15s</a>
 </center>
 </div>
 </div>
