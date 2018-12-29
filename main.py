@@ -105,7 +105,7 @@ function sx(t) {
 }
 </script>
 </head>
-<body style="background-color: black">
+<body style="background-color: beige">
 <div class='container'>
 <audio preload="auto" controls="controls" autoplay>
   <source src="{{url}}"></source>
