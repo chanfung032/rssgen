@@ -1,0 +1,13 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: lxml
+  version: "3.7.3"
+- name: ssl
+  version: "2.7.11"
+
+handlers:
+- url: /.*
+  script: main.app

@@ -56,7 +56,13 @@ def gen():
 def youtube():
     url = request.args.get('url')
     if url:
-        y_url = subprocess.check_output(['youtube-dl', '-g', '-f', 'worstaudio', url]).strip()
+        try:
+            y_url = subprocess.check_output(['youtube-dl', '-g', '-f', 'worstaudio', url]).strip()
+        except AttributeError:
+            import urllib, urllib2, re
+            resp = urllib2.urlopen(url).read()
+            a_urls = [urllib.unquote(i.group(1)) for i in re.finditer(r'url=([^,]*?mime%3Daudio%252Fwebm.*?)\\u0026', resp)]
+            y_url = a_urls[1] if len(a_urls) > 2 and 'itag=249' in a_urls[1] else a_urls[0]
         return redirect('/a/%s.html' % base64.b64encode(y_url))
     else:
         return '''
