@@ -4,16 +4,18 @@ class Dilbert(Recipe):
 
     title = '呆伯特'
     description = ''
-    site_url = 'http://dilbert.com/feed.rss'
+    site_url = 'https://dilbert.com/'
 
     def parse_index(self):
         soup = self.index_to_soup(self.site_url)
-        latest_link = soup.find_all('link')[2]['href']
-        return [{'title': latest_link.rsplit('/', 1)[-1], 'url': latest_link}]
+        titles = [i.text for i in soup.select('.comic-title-name')]
+        links = [i.attrs['href'] for i in soup.select('.comic-title-link')]
+        imgs = soup.select('.img-comic')
+        self.articles = {links[i]: imgs[i] for i in range(len(titles))}
+        return [{'title': titles[i] if titles[i] else links[i].rsplit('/', 1)[-1], 'url': links[i]} for i in range(len(titles))]
 
     def parse_article(self, url):
-        soup = self.index_to_soup(url)
-        c = soup.find(class_='img-comic')
+        c = self.articles[url]
         del c.attrs['width'], c.attrs['height'], c.attrs['class']
         return str(c)
 
