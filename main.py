@@ -100,6 +100,8 @@ def audio(token):
     -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
 }
+a { color: white; }
+body { background-color: black; }
 </style>
 <script type="text/javascript">
 function x(speed) {
@@ -111,7 +113,7 @@ function sx(t) {
 }
 </script>
 </head>
-<body style="background-color: beige">
+<body>
 <div class='container'>
 <audio preload="auto" controls="controls" autoplay>
   <source src="{{url}}"></source>
