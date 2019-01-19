@@ -58,11 +58,12 @@ def youtube():
     if url:
         try:
             y_url = subprocess.check_output(['youtube-dl', '-g', '-f', 'worstaudio', url]).strip()
-        except AttributeError:
+        except (AttributeError, OSError):
             import urllib, urllib2, re
             resp = urllib2.urlopen(url).read()
-            a_urls = [urllib.unquote(i.group(1)) for i in re.finditer(r'url=([^,]*?mime%3Daudio%252Fwebm.*?)\\u0026', resp)]
-            y_url = a_urls[1] if len(a_urls) > 2 and 'itag=249' in a_urls[1] else a_urls[0]
+            a_urls = [urllib.unquote(i.group(1)) for i in re.finditer(r'url=([^,]*?mime%3Daudio%252F(?:webm|mp4).*?)\\u0026', resp)]
+            y_url = filter(lambda x: 'itag=249' in x, a_urls)
+            y_url = y_url[0] if y_url else a_urls[0]
         return redirect('/a/%s.html' % base64.b64encode(y_url))
     else:
         return '''
