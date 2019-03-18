@@ -4,17 +4,19 @@ from bs4 import BeautifulSoup
 from readability.readability import Document
 
 class Recipe(object):
+    ua = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-en) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4'
+
     def __init__(self, args):
         self.args = args
 
     def index_to_soup(self, url):
-        return BeautifulSoup(urllib2.urlopen(url))
+        return BeautifulSoup(urllib2.urlopen(urllib2.Request(url, headers={'User-Agent': self.ua})))
 
     def parse_index(self):
         raise NotImplemented()
 
     def parse_article(self, url):
-        html = urllib2.urlopen(url).read()
+        html = urllib2.urlopen(urllib2.Request(url, headers={'User-Agent': self.ua})).read()
         article = Document(html).summary()
         return article
 
